@@ -1,5 +1,5 @@
 # learn-terraform-aws-instance
-terraform tutorial with AWS
+terraform (v0.14.4) tutorial with AWS
 
 ## Commands
 
