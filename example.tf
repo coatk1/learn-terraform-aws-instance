@@ -19,15 +19,15 @@ terraform {
 
 # This block configures the provider, AWS.
 provider "aws" {
-  profile = "default"   # For AWS credentials
-  region  = var.region  # Using variables
+  profile = "default"  # For AWS credentials
+  region  = var.region # Using variables
   # region  = "us-east-1" # Changed from us-west-2
 }
 
 # This block defines the infrastructure. First string is resource type, second is resource name.
 resource "aws_instance" "example" {
-  ami                    = var.amis[var.region]
-  instance_type          = "t2.micro"
+  ami           = var.amis[var.region]
+  instance_type = "t2.micro"
   # vpc_security_group_ids = var.vpc     # Not needed, this is default VPC but specified for practice.
   # subnet_id              = var.subnet  # Not needed, this is default VPC but specified for practice.
 
@@ -36,6 +36,17 @@ resource "aws_instance" "example" {
   }
 }
 
+# This block defines the elastic IP address.
+resource "aws_eip" "ip" {
+  vpc      = true
+  instance = aws_instance.example.id
+}
+
+# Displays output.
 output "ami" {
   value = aws_instance.example.ami
+}
+
+output "ip" {
+  value = aws_eip.ip.public_ip
 }

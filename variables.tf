@@ -1,15 +1,18 @@
 # Root Module Variables
+# To define a variable set default variable or .tfvars.
 # Input variables. See available_zones.auto.tfvars.
+# Source: https://www.terraform.io/docs/language/values/variables.html
 
-# This is required if not using a default variable. This defines the variable "region" in configuration.
+# Defines the variable region in configuration.
 variable "region" {
-    type        = string
-    description = "This variable sets the instance region."
+  # default = "us-east-1"
+  type        = string
+  description = "This variable sets the instance region."
 }
 
 variable "amis" {
-    type        = map(string)
-    description = "This variable sets the AMI image to the region."
+  type        = map(string)
+  description = "This variable sets the AMI image to the region."
 }
 
 # variable "vpc" {
