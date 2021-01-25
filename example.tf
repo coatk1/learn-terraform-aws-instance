@@ -20,17 +20,22 @@ terraform {
 # This block configures the provider, AWS.
 provider "aws" {
   profile = "default"   # For AWS credentials
-  region  = "us-east-1" # Changed from us-west-2
+  region  = var.region  # Using variables
+  # region  = "us-east-1" # Changed from us-west-2
 }
 
 # This block defines the infrastructure. First string is resource type, second is resource name.
 resource "aws_instance" "example" {
-  ami                    = "ami-03ff55e13c2ca241e"  # Changed from ami-830c94e3. Using us-east-1 region.
+  ami                    = var.amis[var.region]
   instance_type          = "t2.micro"
-  vpc_security_group_ids = ["sg-04638424"]          # Not needed, this is default VPC but specified for practice.
-  subnet_id              = "subnet-8da367ac"        # Not needed, this is default VPC but specified for practice.
+  # vpc_security_group_ids = var.vpc     # Not needed, this is default VPC but specified for practice.
+  # subnet_id              = var.subnet  # Not needed, this is default VPC but specified for practice.
 
   tags = {
     Name = "terraform-aws-ec2"
   }
+}
+
+output "ami" {
+  value = aws_instance.example.ami
 }

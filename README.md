@@ -32,3 +32,13 @@ Destroy resources to current configuration.
 ```
 terraform destroy
 ```
+
+Add file name that specifies terraform variables. If file named, `terraform.tfvars` or `.auto.tfvars`, then can use `terraform apply`
+```
+terraform apply -var-file="terraform.tfvars"
+```
+
+Define variable via CLI
+```
+terraform apply -var region=us-west-2
+```
