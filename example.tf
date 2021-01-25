@@ -10,10 +10,13 @@ terraform {
       version = "~> 2.70"       # Recommended
     }
   }
+
+  # Storing state file in S3 bucket. Must run `terraform init` when making changes.
   # backend "s3" {
-  #   bucket = "aws-coatk1-terraform-state"
-  #   key    = "path/to/my/key"
-  #   region = "us-east-1"
+  #   encrypt = true
+  #   bucket  = "aws-coatk1-terraform-state"
+  #   key     = "learn-terraform-aws-instance/terraform.tfstate"
+  #   region  = "us-east-1"
   # }
 }
 
@@ -22,6 +25,23 @@ provider "aws" {
   profile = "default"  # For AWS credentials
   region  = var.region # Using variables
   # region  = "us-east-1" # Changed from us-west-2
+}
+
+# Create an S3 bucket to store the state file in
+resource "aws_s3_bucket" "terraform-state-storage-s3" {
+    bucket = "aws-coatk1-terraform-state"
+
+    versioning {
+      enabled = true
+    }
+
+    lifecycle {
+      prevent_destroy = false  # Set to false for now.
+    }
+
+    # tags = {
+    #   Name = "dummy"
+    # }
 }
 
 # This block defines the infrastructure. First string is resource type, second is resource name.
