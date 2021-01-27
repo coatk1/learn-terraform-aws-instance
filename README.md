@@ -47,3 +47,17 @@ Display output
 ```
 terraform output output_name
 ```
+
+## Resources
+* https://learn.hashicorp.com/tutorials/terraform/aws-build?in=terraform/aws-get-started
+* https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
+* https://www.terraform.io/docs/backends/types/s3.html
+* https://www.terraform.io/docs/language/values/variables.html
+* https://learn.hashicorp.com/collections/terraform/configuration-language
+* https://learn.hashicorp.com/tutorials/terraform/cloud-migrate?in=terraform/state
+* https://learn.hashicorp.com/collections/terraform/modules
+
+### Best Practices
+* https://www.terraform-best-practices.com/
+* https://stackoverflow.com/questions/33157516/best-practices-when-using-terraform
+* https://learn.hashicorp.com/tutorials/terraform/organize-configuration?in=terraform/modules
