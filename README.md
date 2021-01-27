@@ -57,6 +57,12 @@ terraform output output_name
 * https://learn.hashicorp.com/tutorials/terraform/cloud-migrate?in=terraform/state
 * https://learn.hashicorp.com/collections/terraform/modules
 
+### State Files
+* https://mohitgoyal.co/2020/09/30/upload-terraform-state-files-to-remote-backend-amazon-s3-and-azure-storage-account/
+* https://medium.com/@jessgreb01/how-to-terraform-locking-state-in-s3-2dc9a5665cb6
+* https://www.terraform.io/docs/language/settings/backends/s3.html
+* https://medium.com/faun/creating-an-s3-bucket-module-in-terraform-c89b77f2b1ae
+
 ### Best Practices
 * https://www.terraform-best-practices.com/
 * https://stackoverflow.com/questions/33157516/best-practices-when-using-terraform
