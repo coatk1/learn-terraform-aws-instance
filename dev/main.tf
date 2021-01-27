@@ -4,6 +4,23 @@ provider "aws" {
   region  = var.aws_region # Using variables
 }
 
+#############
+# Creates VPC
+#############
+
+data "aws_vpc" "default" {
+  default = true
+}
+
+data "aws_subnet_ids" "all" {
+  vpc_id = data.aws_vpc.default.id
+}
+
+data "aws_security_group" "default" {
+  vpc_id = data.aws_vpc.default.id
+  name   = "default"
+}
+
 # This block creates VPC resources.
 # module "vpc" {
 #   source  = "terraform-aws-modules/vpc/aws"  # Could also be path to your own custom module.
@@ -21,6 +38,10 @@ provider "aws" {
 
 #   tags = var.vpc_tags
 # }
+
+#############
+# Creates EC2
+#############
 
 # This block defines the ec2 instances.
 module "ec2_instances" {
@@ -42,6 +63,28 @@ module "ec2_instances" {
     Environment = "dev"
   }
 }
+
+# # This block defines the infrastructure. First string is resource type, second is resource name.
+# resource "aws_instance" "terraform_ec2" {
+#   ami                    = var.amis[var.aws_region]
+#   instance_type          = "t2.micro"
+#   vpc_security_group_ids = var.vpc_name     # Not needed, this is default VPC but specified for practice.
+#   subnet_id              = var.subnet  # Not needed, this is default VPC but specified for practice.
+
+#   tags = {
+#     Name = "${var.ec2}-${var.dev_prefix}-test"
+#   }
+# }
+
+# # This block defines the elastic IP address.
+# resource "aws_eip" "ip" {
+#   vpc      = true
+#   instance = aws_instance.terraform_ec2.id
+# }
+
+#############
+# Creates S3
+#############
 
 # Create an S3 bucket to store the state file in
 resource "aws_s3_bucket" "terraform_state_storage_s3_dev" {
@@ -71,20 +114,61 @@ terraform {
   }
 }
 
-# # This block defines the infrastructure. First string is resource type, second is resource name.
-# resource "aws_instance" "terraform_ec2" {
-#   ami                    = var.amis[var.aws_region]
-#   instance_type          = "t2.micro"
-#   vpc_security_group_ids = var.vpc_name     # Not needed, this is default VPC but specified for practice.
-#   subnet_id              = var.subnet  # Not needed, this is default VPC but specified for practice.
+#############
+# Creates RDS
+#############
+
+# module "rds" {
+#   source  = "terraform-aws-modules/rds/aws"
+#   version = "~> 2.0"
+
+#   # insert the 11 required variables here
+#   identifier = "demodb-postgres"
+
+#   engine            = "postgres"
+#   engine_version    = "9.6.9"
+#   instance_class    = "db.t3.micro"
+#   allocated_storage = 5
+#   storage_encrypted = false
+
+#   # kms_key_id        = "arm:aws:kms:<region>:<account id>:key/<kms key id>"
+#   name = "demodb"
+
+#   # NOTE: Do NOT use 'user' as the value for 'username' as it throws:
+#   # "Error creating DB Instance: InvalidParameterValue: MasterUsername
+#   # user cannot be used as it is a reserved word used by the engine"
+#   username = var.name
+
+#   password = var.pwd
+#   port     = "5432"
+
+#   vpc_security_group_ids = [data.aws_security_group.default.id]
+
+#   maintenance_window = "Mon:00:00-Mon:03:00"
+#   backup_window      = "03:00-06:00"
+
+#   # disable backups to create DB faster
+#   backup_retention_period = 0
 
 #   tags = {
-#     Name = "${var.ec2}-${var.dev_prefix}-test"
+#     Owner       = "user"
+#     Environment = "dev"
 #   }
-# }
 
-# # This block defines the elastic IP address.
-# resource "aws_eip" "ip" {
-#   vpc      = true
-#   instance = aws_instance.terraform_ec2.id
+#   enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
+
+#   # DB subnet group
+#   subnet_ids = data.aws_subnet_ids.all.ids
+
+#   # DB parameter group
+#   family = "postgres9.6"
+
+#   # DB option group
+#   major_engine_version = "9.6"
+
+#   # Snapshot name upon DB deletion
+#   final_snapshot_identifier = "demodb"
+
+#   # Database Deletion Protection
+#   deletion_protection = false
 # }

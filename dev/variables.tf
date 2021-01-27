@@ -81,3 +81,13 @@ variable "vpc_tags" {
     Environment = "dev"
   }
 }
+
+variable "name" {
+  description = "Username"
+  type        = string
+}
+
+variable "pwd" {
+  description = "Password"
+  type        = string
+}
